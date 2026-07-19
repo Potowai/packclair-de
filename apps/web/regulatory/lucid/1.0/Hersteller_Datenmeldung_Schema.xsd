@@ -1,0 +1,110 @@
+﻿<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="qualified">
+	<xs:element name="Root">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="VersionNoInterface"  type="DecimalWithPoint_2_3" >
+				</xs:element>
+				<xs:element name="PackagingTypeCode" type="Only_V">
+				</xs:element>
+				<xs:element name="TypeOfReportCode" type="ReportingTypeCodes">
+				</xs:element>
+				<xs:element name="ReportingPeriodFrom" type="xs:date">
+				</xs:element>
+				<xs:element name="ReportingPeriodTo" type="xs:date">
+				</xs:element>
+				<xs:element name="ListOfSystemOperators">
+					<xs:complexType>
+						<xs:sequence minOccurs="0">
+							<xs:element name="SystemOperator" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="SystemOperatorID" type="ID">
+										</xs:element>
+										<xs:element name="ListOfMaterials">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Material" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="MaterialCode" type="MaterialCodes">
+																</xs:element>
+																<xs:element name="Mass" type="DecimalWithComma_15_3">
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+											<xs:unique name="MaterialCodeDistinct">
+												<xs:selector xpath="Material/MaterialCode"/>
+												<xs:field xpath="."/>
+											</xs:unique>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+					<xs:unique name="SystemOperatorIDDistinct">
+						<xs:selector xpath="SystemOperator/SystemOperatorID"/>
+						<xs:field xpath="."/>
+					</xs:unique>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- decimal point, min. one max. 15 characters in front of the decimal point and three characters behind the decimal point -->
+	<xs:simpleType name="DecimalWithComma_15_3">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="-?\d{1,15},\d{3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- decimal point, min. one max. two characters in front of the decimal point and min. one and max. three characters behind the decimal point -->
+	<xs:simpleType name="DecimalWithPoint_2_3">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{1,2}\.\d{1,3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Only V-->
+	<xs:simpleType name="Only_V">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[V]"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Only reporting type codes -->
+	<xs:simpleType name="ReportingTypeCodes">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="H[PMJNA]M1"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Only MaterialCodes -->
+	<xs:simpleType name="MaterialCodes">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="10000"/>
+			<xs:enumeration value="20000"/>
+			<xs:enumeration value="39000"/>
+			<xs:enumeration value="49000"/>
+			<xs:enumeration value="50000"/>
+			<xs:enumeration value="79000"/>
+			<xs:enumeration value="80000"/>
+			<xs:enumeration value="30000"/>
+			<xs:enumeration value="40000"/>
+			<xs:enumeration value="60000"/>
+			<xs:enumeration value="70000"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Two capital letters and 13 digits -->
+	<xs:simpleType name="ID">
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="replace" />
+			<xs:pattern value="[A-Z]{2}[0-9]{13}"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

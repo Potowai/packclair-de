@@ -1,6 +1,8 @@
 import { escapeSpreadsheetCell } from '../import/normalize';
 import type { ImportBatch, NormalizedOrderLine } from '../import/types';
 
+export { escapeSpreadsheetCell };
+
 export type SummaryCsvRow = Readonly<{
   sourceKey: string;
   accountKey: string;
