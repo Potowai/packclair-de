@@ -3,7 +3,10 @@ import { resolve } from 'node:path';
 
 export default defineConfig({
   resolve: {
-    alias: { '@': resolve(__dirname, 'src') }
+    alias: {
+      '@': resolve(__dirname, 'src'),
+      'virtual:pwa-register': resolve(__dirname, 'src/test/pwa-register-mock.ts')
+    }
   },
   test: {
     globals: true,

@@ -34,6 +34,7 @@ export default defineConfig({
       },
       workbox: {
         navigateFallbackDenylist: [/^\/api\//],
+        additionalManifestEntries: [{ url: '/app/', revision: 'app-index' }],
         runtimeCaching: [
           {
             urlPattern: ({ request }) => request.destination === 'document',

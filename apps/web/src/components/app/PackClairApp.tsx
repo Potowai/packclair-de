@@ -1,4 +1,5 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
+import { registerSW } from 'virtual:pwa-register';
 import { INITIAL_STATE, appReducer } from './app-reducer';
 import { ContextStep } from './steps/ContextStep';
 import { ImportStep } from './steps/ImportStep';
@@ -36,6 +37,13 @@ export function PackClairApp({ domainWorker, download }: PackClairAppProps) {
   const gateway = download ?? new BrowserDownloadGateway();
   void FreeEntitlementGateway;
   void ReferenceStatusGatewayImpl;
+
+  useEffect(() => {
+    const update = registerSW({ immediate: true });
+    return () => {
+      void update;
+    };
+  }, []);
 
   return (
     <main>

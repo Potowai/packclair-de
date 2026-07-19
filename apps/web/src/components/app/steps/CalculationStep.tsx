@@ -2,7 +2,31 @@ import { useState, type Dispatch } from 'react';
 import type { AppAction, AppState } from '../app-reducer';
 import type { DomainWorkerApi } from '../../../app/ports/domain-worker';
 import { REFERENCE_SET_VERSION } from '../../../domain/regulatory/reference-set';
-import { MATERIAL_CODES } from '../../../domain/regulatory/materials';
+import { MATERIAL_CODES, type MaterialCode } from '../../../domain/regulatory/materials';
+import type { PackagingProfileRevision, MaterialMasses } from '../../../domain/calculation/types';
+
+function gramsToMg(value: string | undefined): bigint {
+  if (!value) return 0n;
+  const normalized = value.trim().replace(',', '.');
+  const num = Number(normalized);
+  if (!Number.isFinite(num) || num < 0) return 0n;
+  return BigInt(Math.round(num * 1000));
+}
+
+function profileToRevision(p: AppState['profiles'][number]): PackagingProfileRevision {
+  const massesMg = Object.fromEntries(MATERIAL_CODES.map((c) => [c, 0n])) as Record<MaterialCode, bigint>;
+  for (const code of MATERIAL_CODES) {
+    massesMg[code] = gramsToMg(p.masses[code]);
+  }
+  return {
+    id: p.id,
+    logicalId: p.kind === 'product' ? (p.sku ?? p.id) : p.id,
+    revision: 1,
+    kind: p.kind,
+    sku: p.kind === 'product' ? (p.sku ?? null) : null,
+    massesMg: massesMg as MaterialMasses
+  };
+}
 
 export function CalculationStep({
   state,
@@ -25,7 +49,7 @@ export function CalculationStep({
         batchIds: [state.importBatch.id],
         createdAt: new Date().toISOString(),
         trustedDateBerlin: new Date().toISOString().slice(0, 10),
-        profileRevisions: [],
+        profileRevisions: state.profiles.map(profileToRevision),
         monoParcelAttestation: state.monoParcelAttestation
           ? {
               batchId: state.importBatch.id,

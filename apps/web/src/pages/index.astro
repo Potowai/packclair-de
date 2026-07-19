@@ -9,18 +9,59 @@ import '@/styles/global.css';
     <title>PackClair DE — Préparez votre déclaration LUCID Allemagne</title>
     <meta
       name="description"
-      content="Outil local pour calculer et préparer votre fichier de déclaration d’emballages LUCID pour l’Allemagne."
+      content="Outil local pour calculer et préparer votre fichier de déclaration d’emballages LUCID pour l’Allemagne. Aucune donnée n’est envoyée à un serveur."
     />
   </head>
   <body>
     <main>
       <h1>PackClair DE</h1>
-      <p>
-        PackClair DE aide les petits vendeurs en ligne à préparer leur déclaration
-        d’emballages pour l’Allemagne (LUCID). Vos commandes et calculs restent
-        sur votre appareil.
+      <p class="lead">
+        Préparez en local votre déclaration d’emballages pour l’Allemagne (LUCID).
+        Importez vos commandes, calculez vos masses, puis exportez le fichier XML à
+        déposer vous-même dans LUCID.
       </p>
-      <p><a href="/app/">Ouvrir l’assistant</a></p>
+
+      <p><a class="cta" href="/app/">Ouvrir l’assistant</a></p>
+
+      <section aria-labelledby="confiance">
+        <h2 id="confiance">Vos données restent chez vous</h2>
+        <ul>
+          <li>Tout le calcul s’effectue dans votre navigateur.</li>
+          <li>Aucune commande, SKU ou masse n’est transmise à un serveur.</li>
+          <li>Vous gardez le contrôle : le dépôt LUCID reste manuel.</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="etapes">
+        <h2 id="etapes">En quelques étapes</h2>
+        <ol>
+          <li>Choisissez le type de rapport et la période.</li>
+          <li>Importez votre fichier CSV de commandes.</li>
+          <li>Renseignez vos profils d’emballage par produit et par colis.</li>
+          <li>Lancez le calcul et confirmez les masses en tant qu’opérateur.</li>
+          <li>Exportez le fichier XML LUCID prêt à déposer.</li>
+        </ol>
+      </section>
+
+      <p class="muted">
+        PackClair DE est un outil d’aide à la préparation. La responsabilité du dépôt
+        et de l’exactitude des données incombe à l’utilisateur.
+      </p>
     </main>
   </body>
 </html>
+
+<style>
+  .lead { font-size: 1.05rem; }
+  .cta {
+    display: inline-block;
+    margin: 0.5rem 0 1.5rem;
+    padding: 0.7rem 1.2rem;
+    border-radius: 0.45rem;
+    background: var(--color-accent);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .muted { color: var(--color-muted); font-size: 0.9rem; }
+</style>

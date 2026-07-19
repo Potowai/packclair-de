@@ -8,6 +8,14 @@ export type MonoParcelAttestation = Readonly<{
   attestedAt: string;
 }>;
 
+export type PackagingProfileDef = Readonly<{
+  id: string;
+  kind: 'product' | 'shipment';
+  sku?: string;
+  /** mass in grams (string, comma decimal) per material code */
+  masses: Partial<Record<MaterialCode, string>>;
+}>;
+
 export type AppStep =
   | 'context'
   | 'import'
@@ -36,6 +44,7 @@ export type AppState = Readonly<{
   confirmedGrams: Partial<Record<MaterialCode, string>>;
   reasons: Partial<Record<MaterialCode, string>>;
   monoParcelAttestation?: MonoParcelAttestation;
+  profiles: readonly PackagingProfileDef[];
   declaration?: ReadyDeclaration;
   xmlBytes?: Uint8Array;
   blockingErrors: readonly string[];
@@ -46,6 +55,7 @@ export const INITIAL_STATE: AppState = {
   step: 'context',
   confirmedGrams: {},
   reasons: {},
+  profiles: [],
   blockingErrors: []
 };
 
@@ -53,7 +63,7 @@ export type AppAction =
   | { type: 'SET_CONTEXT'; context: ReportContext }
   | { type: 'IMPORT_BATCH'; batch: ImportBatch; mapping: CsvMapping }
   | { type: 'ATTEST_MONO_PARCEL'; profileRevisionId: string; attestedAt: string }
-  | { type: 'SET_PROFILES_DONE' }
+  | { type: 'SET_PROFILES_DONE'; profiles: readonly PackagingProfileDef[] }
   | { type: 'SET_SHIPMENTS_DONE' }
   | { type: 'CALCULATED'; snapshot: CalculationSnapshot }
   | { type: 'SET_OPERATOR'; operatorId: string }
@@ -98,7 +108,7 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         step: 'calculation'
       };
     case 'SET_PROFILES_DONE':
-      return { ...state, step: 'shipments' };
+      return { ...state, profiles: action.profiles, step: 'shipments' };
     case 'SET_SHIPMENTS_DONE':
       return { ...state, step: 'calculation' };
     case 'CALCULATED':
