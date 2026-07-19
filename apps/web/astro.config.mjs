@@ -1,8 +1,16 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import VitePWA from '@vite-pwa/astro';
+import { fileURLToPath } from 'node:url';
 
 export default defineConfig({
+  vite: {
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      }
+    }
+  },
   site: 'https://packclair.example',
   integrations: [
     react(),

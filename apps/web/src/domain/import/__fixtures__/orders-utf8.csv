@@ -1,0 +1,4 @@
+order_id,line_id,sku,quantity,order_date,country,status
+A1,1,MUG,2,2026-03-12,DE,paid
+A2,2,CARD,1,2026-03-15,DE,paid
+B1,3,BAG,4,2026-04-02,FR,paid
