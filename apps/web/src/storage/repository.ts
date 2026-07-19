@@ -69,12 +69,12 @@ export class LocalRepository {
           }));
           await this.db.orderLines.bulkAdd(lineRows);
           const seen = new Set<string>();
-          const shipRows: { key: string; batchId: string; shipmentId: string }[] = [];
+          const shipRows: { key: string; batchId: string; shipmentId: string; _schema: 'shipment@1' }[] = [];
           for (const line of batch.lines) {
             const key = shipmentKey(line);
             if (seen.has(key)) continue;
             seen.add(key);
-            shipRows.push({ key, batchId: batch.id, shipmentId: line.shipmentId ?? 'none' });
+            shipRows.push({ key, batchId: batch.id, shipmentId: line.shipmentId ?? 'none', _schema: 'shipment@1' });
           }
           await this.db.shipments.bulkAdd(shipRows);
         }

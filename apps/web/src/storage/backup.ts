@@ -52,9 +52,9 @@ export class BackupService {
   async exportBackup(): Promise<BackupArchive> {
     const tables = {} as Record<string, unknown[]>;
     for (const name of TABLE_NAMES) {
-      const rows = await (this.db as unknown as Record<string, { toArray(): Promise<unknown[]> }>)[
-        name
-      ].toArray();
+      const store = (this.db as unknown as Record<string, { toArray(): Promise<unknown[]> }>)[name];
+      if (!store) throw new Error(`BACKUP_MISSING_TABLE:${name}`);
+      const rows = await store.toArray();
       tables[name] = rows;
     }
     return {
@@ -84,9 +84,10 @@ export class BackupService {
       }
     }
 
-    await this.db.transaction('rw', ...TABLE_NAMES.map((n) => (this.db as never as Record<string, unknown>)[n] as never), async () => {
+    await this.db.transaction('rw', TABLE_NAMES, async () => {
       for (const name of TABLE_NAMES) {
         const table = (this.db as unknown as Record<string, { clear(): Promise<void>; bulkPut(rows: unknown[]): Promise<void> }>)[name];
+        if (!table) throw new Error(`BACKUP_MISSING_TABLE:${name}`);
         await table.clear();
         await table.bulkPut(archive.tables[name]);
       }
@@ -99,9 +100,11 @@ export class BackupService {
   }
 
   async clearAllLocalData(): Promise<void> {
-    await this.db.transaction('rw', ...TABLE_NAMES.map((n) => (this.db as never as Record<string, unknown>)[n] as never), async () => {
+    await this.db.transaction('rw', TABLE_NAMES, async () => {
       for (const name of TABLE_NAMES) {
-        await (this.db as unknown as Record<string, { clear(): Promise<void> }>)[name].clear();
+        const table = (this.db as unknown as Record<string, { clear(): Promise<void> }>)[name];
+        if (!table) throw new Error(`BACKUP_MISSING_TABLE:${name}`);
+        await table.clear();
       }
     });
   }

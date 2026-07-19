@@ -53,9 +53,9 @@ describe('sérialiseur XML LUCID', () => {
   });
 
   it('rejette un matériau moderne', () => {
-    expect(() => serializeLucidXml(report({ confirmedGrams: { '39000': 5_000n } }))).toThrowError(
-      DomainError
-    );
+    expect(() =>
+      serializeLucidXml(report({ confirmedGrams: { '39000': 5_000n } as Record<string, bigint> }))
+    ).toThrowError(DomainError);
   });
 
   it('rejette une masse négative', () => {

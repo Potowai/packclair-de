@@ -63,7 +63,7 @@ export async function requestPersistentStorage(): Promise<boolean> {
   if (!nav?.storage?.persist) return false;
   try {
     const result = await nav.storage.persist();
-    return result === 'granted';
+    return String(result) === 'granted';
   } catch {
     return false;
   }

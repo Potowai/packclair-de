@@ -8,7 +8,7 @@ import type { ReadyDeclaration } from '../calculation/types';
 
 const UTF8_BOM = [0xef, 0xbb, 0xbf];
 
-const MODERN_SET = new Set<MaterialCode>(MODERN_MATERIALS);
+const MODERN_SET = new Set<string>(MODERN_MATERIALS);
 const SUPPORTED_SET = new Set<string>(SUPPORTED_REPORTS);
 
 function escapeText(value: string): string {
@@ -32,14 +32,17 @@ export function serializeLucidXml(report: ReadyDeclaration): Uint8Array {
   }
 
   const materials: { code: MaterialCode; grams: bigint }[] = [];
-  for (const code of MATERIAL_CODES) {
-    const grams = report.confirmedGrams[code];
+  for (const [rawCode, grams] of Object.entries(report.confirmedGrams)) {
     if (grams === undefined || grams === null) continue;
+    if (MODERN_SET.has(rawCode)) {
+      throw new DomainError('MODERN_MATERIAL', `matériau moderne non pris en charge: ${rawCode}`);
+    }
+    if (!MATERIAL_CODES.includes(rawCode as MaterialCode)) {
+      throw new DomainError('UNKNOWN_MATERIAL', `matériau inconnu: ${rawCode}`);
+    }
+    const code = rawCode as MaterialCode;
     if (grams < 0n) {
       throw new DomainError('NEGATIVE_MASS', `matériau ${code}`);
-    }
-    if (MODERN_SET.has(code)) {
-      throw new DomainError('MODERN_MATERIAL', `matériau moderne non pris en charge: ${code}`);
     }
     if (grams === 0n) continue;
     materials.push({ code, grams });

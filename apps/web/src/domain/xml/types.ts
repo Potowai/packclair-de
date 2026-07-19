@@ -8,9 +8,9 @@ export type SupportedReport = Extract<ReportType, 'HPM1' | 'HMM1' | 'HJM1'>;
 
 export const SUPPORTED_REPORTS: readonly SupportedReport[] = ['HPM1', 'HMM1', 'HJM1'];
 
-export const BLOCKED_REPORTS: readonly ReportType[] = ['HNM1', 'HAM1'];
+export const BLOCKED_REPORTS: readonly string[] = ['HNM1', 'HAM1'];
 
-export const MODERN_MATERIALS: readonly MaterialCode[] = ['39000', '49000', '79000'];
+export const MODERN_MATERIALS: readonly string[] = ['39000', '49000', '79000'];
 
 export type ExportDecision =
   | { status: 'allowed'; fresh: boolean }
