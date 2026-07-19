@@ -1,0 +1,13 @@
+{
+  "name": "packclair",
+  "private": true,
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev": "npm run dev --workspace @packclair/web",
+    "preview": "npm run preview --workspace @packclair/web",
+    "build": "npm run build --workspace @packclair/web",
+    "check": "npm run check --workspace @packclair/web",
+    "test": "npm run test --workspace @packclair/web --",
+    "test:e2e": "npm run test:e2e --workspace @packclair/web"
+  }
+}

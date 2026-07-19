@@ -1,0 +1,45 @@
+{
+  "name": "@packclair/web",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "dev": "astro dev",
+    "preview": "astro preview",
+    "build": "astro check && astro build",
+    "check": "astro check && tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@astrojs/react": "6.0.1",
+    "@vite-pwa/astro": "1.2.0",
+    "astro": "5.18.2",
+    "comlink": "4.4.2",
+    "dexie": "4.4.4",
+    "papaparse": "5.5.4",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.9",
+    "@axe-core/playwright": "4.12.1",
+    "@playwright/test": "1.61.1",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/react": "16.3.2",
+    "@testing-library/user-event": "14.6.1",
+    "@types/node": "26.1.1",
+    "@types/papaparse": "5.5.2",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "fast-check": "4.9.0",
+    "jsdom": "29.1.1",
+    "fake-indexeddb": "6.2.5",
+    "typescript": "6.0.3",
+    "vitest": "4.1.10",
+    "xmllint-wasm": "5.2.0"
+  }
+}
