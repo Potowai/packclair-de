@@ -341,7 +341,7 @@ Decode BOMs first, then fatal UTF-8, then require a user-confirmed Windows-1252 
 Run: `npm test -- src/domain/import src/domain/export && npm run check`  
 Expected: PASS including hostile fixtures.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/web/src/domain/import apps/web/src/domain/export
@@ -421,7 +421,7 @@ Prepend UTF-8 BOM bytes after serialization. Reject `39000`, `49000`, `79000`, `
 Run: `npm test -- src/domain/xml && npm run check`  
 Expected: PASS; xmllint-wasm returns no validation errors for all three supported report types.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/web/src/domain/xml apps/web/src/domain/export apps/web/regulatory/lucid
