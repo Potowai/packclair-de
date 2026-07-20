@@ -12,7 +12,7 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "types": ["vitest/globals", "@testing-library/jest-dom"],
+    "types": ["vitest/globals", "@testing-library/jest-dom", "vite/client"],
     "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {

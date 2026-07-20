@@ -10,6 +10,8 @@ import { OperatorConfirmationStep } from './steps/OperatorConfirmationStep';
 import { ExportStep } from './steps/ExportStep';
 import { DataSafetyPanel } from './DataSafetyPanel';
 import { FreeCalculator } from '../calculator/FreeCalculator';
+import { ReferralPanel } from './ReferralPanel';
+import { initReferral } from '@/app/referral';
 import { createLocalDomainWorkerApi, type DomainWorkerApi } from '../../app/ports/domain-worker';
 import { FreeEntitlementGateway } from '../../app/ports/entitlement-gateway';
 import { ReferenceStatusGatewayImpl } from '../../app/ports/reference-status-gateway';
@@ -40,6 +42,7 @@ export function PackClairApp({ domainWorker, download }: PackClairAppProps) {
 
   useEffect(() => {
     const update = registerSW({ immediate: true });
+    initReferral();
     return () => {
       void update;
     };
@@ -82,6 +85,7 @@ export function PackClairApp({ domainWorker, download }: PackClairAppProps) {
       {state.lastMessage && <p role="status">{state.lastMessage}</p>}
 
       <DataSafetyPanel />
+      <ReferralPanel />
       <FreeCalculator />
     </main>
   );

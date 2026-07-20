@@ -2,6 +2,8 @@ import { useState, type Dispatch } from 'react';
 import type { AppAction, AppState } from '../app-reducer';
 import type { DomainWorkerApi } from '../../../app/ports/domain-worker';
 import type { DownloadGateway } from '../../../app/ports/download-gateway';
+import { referralStore } from '@/app/referral';
+import { recordConversion } from '@/domain/referral/referral';
 
 export function ExportStep({
   state,
@@ -25,6 +27,7 @@ export function ExportStep({
       dispatch({ type: 'XML_READY', bytes });
       const name = `lucid_${state.declaration.type}_${state.declaration.periodFrom}_${state.declaration.periodTo}_${state.declaration.operatorId}.xml`;
       await download.download(name, bytes, 'application/xml');
+      referralStore.save(recordConversion(referralStore.load()));
       setDone(true);
     } finally {
       setBusy(false);
