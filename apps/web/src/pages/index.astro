@@ -3,6 +3,7 @@ import '@/styles/global.css';
 import { ReferralPanel } from '@/components/app/ReferralPanel';
 
 const base = import.meta.env.BASE_URL;
+const appHref = base.replace(/\/$/, '') + '/app/';
 ---
 
 <html lang="fr">
@@ -24,7 +25,7 @@ const base = import.meta.env.BASE_URL;
         déposer vous-même dans LUCID.
       </p>
 
-      <p><a class="cta" href={`${base}app/`}>Ouvrir l’assistant</a></p>
+      <p><a class="cta" href={appHref}>Ouvrir l’assistant</a></p>
 
       <ReferralPanel client:only="react" />
 

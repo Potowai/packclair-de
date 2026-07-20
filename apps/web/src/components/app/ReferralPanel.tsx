@@ -6,7 +6,8 @@ import { BrowserDownloadGateway } from '@/app/ports/download-gateway';
 function shareUrl(code: string): string {
   if (typeof location === 'undefined') return `?ref=${code}`;
   const base = (import.meta.env.BASE_URL as string) || '/';
-  return `${location.origin}${base}app/?ref=${code}`;
+  const path = base.replace(/\/$/, '') + '/app/';
+  return `${location.origin}${path}?ref=${code}`;
 }
 
 export function ReferralPanel() {
