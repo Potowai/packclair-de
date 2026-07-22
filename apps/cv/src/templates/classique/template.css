@@ -1,0 +1,47 @@
+/* Gabarit Classique — une seule colonne, aucun flottant (contrat ATS). */
+.cv-classique {
+  max-width: 190mm;
+  padding: 14mm 16mm;
+  color: #1a1a1a;
+  line-height: 1.45;
+}
+
+.cv-classique h1 {
+  font-size: 24px;
+  text-align: center;
+  margin: 0 0 2mm;
+}
+
+.cv-classique .cv-titre {
+  text-align: center;
+  font-style: italic;
+  margin: 0 0 1mm;
+}
+
+.cv-classique .cv-contact {
+  text-align: center;
+  margin: 0 0 6mm;
+}
+
+.cv-classique h2 {
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #444444;
+  padding-bottom: 1mm;
+  margin: 6mm 0 3mm;
+}
+
+.cv-classique h3 {
+  font-size: 13.5px;
+  margin: 3mm 0 0;
+}
+
+.cv-classique p {
+  margin: 0.5mm 0;
+}
+
+.cv-classique ul {
+  margin: 1mm 0 0;
+  padding-left: 5mm;
+}

@@ -1,0 +1,50 @@
+/* Gabarit Moderne — une seule colonne (contrat ATS), accent #1a4f8a (contraste AA). */
+.cv-moderne {
+  max-width: 190mm;
+  padding: 14mm 16mm;
+  color: #20242a;
+  line-height: 1.5;
+}
+
+.cv-moderne h1 {
+  font-size: 26px;
+  margin: 0;
+  color: #1a4f8a;
+}
+
+.cv-moderne .cv-titre {
+  font-weight: 600;
+  margin: 1mm 0;
+}
+
+.cv-moderne .cv-contact {
+  margin: 1mm 0 6mm;
+}
+
+.cv-moderne h2 {
+  font-size: 14px;
+  color: #1a4f8a;
+  border-left: 4px solid #1a4f8a;
+  padding-left: 3mm;
+  margin: 6mm 0 3mm;
+}
+
+.cv-moderne h3 {
+  font-size: 13.5px;
+  margin: 3mm 0 0;
+}
+
+.cv-moderne [data-field='poste-dates'],
+.cv-moderne [data-field='formation-dates'],
+.cv-moderne [data-field='formation-annee'] {
+  color: #4a5568;
+}
+
+.cv-moderne p {
+  margin: 0.5mm 0;
+}
+
+.cv-moderne ul {
+  margin: 1mm 0 0;
+  padding-left: 5mm;
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@cvclair/ats-harness",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@cvclair/cv-schema": "*",
+    "node-html-parser": "7.0.1"
+  },
+  "devDependencies": {
+    "fast-check": "4.9.0",
+    "typescript": "6.0.3",
+    "vitest": "4.1.10"
+  }
+}

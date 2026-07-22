@@ -1,13 +1,19 @@
 {
   "name": "packclair",
   "private": true,
-  "workspaces": ["apps/*"],
+  "workspaces": ["apps/*", "packages/*"],
   "scripts": {
     "dev": "npm run dev --workspace @packclair/web",
     "preview": "npm run preview --workspace @packclair/web",
     "build": "npm run build --workspace @packclair/web",
     "check": "npm run check --workspace @packclair/web",
     "test": "npm run test --workspace @packclair/web --",
-    "test:e2e": "npm run test:e2e --workspace @packclair/web"
+    "test:e2e": "npm run test:e2e --workspace @packclair/web",
+    "dev:cv": "npm run dev --workspace @cvclair/cv",
+    "preview:cv": "npm run preview --workspace @cvclair/cv",
+    "build:cv": "npm run build --workspace @cvclair/cv",
+    "check:cv": "npm run check --workspace @cvclair/cv-schema && npm run check --workspace @cvclair/ats-harness && npm run check --workspace @cvclair/cv",
+    "test:cv": "npm run test --workspace @cvclair/cv-schema && npm run test --workspace @cvclair/ats-harness && npm run test --workspace @cvclair/cv",
+    "test:e2e:cv": "npm run test:e2e --workspace @cvclair/cv"
   }
 }

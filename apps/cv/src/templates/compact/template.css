@@ -1,0 +1,43 @@
+/* Gabarit Compact — une seule colonne (contrat ATS), interlignes resserrés. */
+.cv-compact {
+  max-width: 190mm;
+  padding: 10mm 14mm;
+  color: #111111;
+  line-height: 1.3;
+}
+
+.cv-compact h1 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.cv-compact .cv-titre {
+  font-weight: 700;
+  margin: 0.5mm 0;
+}
+
+.cv-compact .cv-contact {
+  margin: 0.5mm 0 4mm;
+}
+
+.cv-compact h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  background: #e8e8e8;
+  padding: 1mm 2mm;
+  margin: 4mm 0 2mm;
+}
+
+.cv-compact h3 {
+  font-size: 13px;
+  margin: 2mm 0 0;
+}
+
+.cv-compact p {
+  margin: 0.3mm 0;
+}
+
+.cv-compact ul {
+  margin: 0.5mm 0 0;
+  padding-left: 4.5mm;
+}
