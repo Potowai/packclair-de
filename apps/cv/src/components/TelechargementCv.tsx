@@ -85,7 +85,6 @@ export default function TelechargementCv() {
   return (
     <div className="apercu">
       <header className="apercu-barre">
-        <a href="/app/">← Retour à l'édition</a>
         <div>
           {paiement.etat === 'verification' ? <span>Vérification du paiement…</span> : null}
           {paiement.etat === 'debloque' ? (

@@ -1,6 +1,7 @@
 ---
 import '@/styles/global.css';
 import ApercuCv from '@/components/ApercuCv';
+import Header from '@/components/Header';
 ---
 
 <html lang="fr">
@@ -10,8 +11,12 @@ import ApercuCv from '@/components/ApercuCv';
     <title>Aperçu — CVClair</title>
     <meta name="robots" content="noindex" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      (function(){var t=localStorage.getItem('cvclair-theme');if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);})();
+    </script>
   </head>
   <body>
+    <Header client:load />
     <ApercuCv client:only="react" />
   </body>
 </html>

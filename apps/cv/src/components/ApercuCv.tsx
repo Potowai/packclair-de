@@ -56,7 +56,6 @@ export default function ApercuCv() {
   return (
     <div className="apercu">
       <header className="apercu-barre">
-        <a href="/app/">← Retour à l'édition</a>
         <div>
           <strong>Score ATS : {lint ? `${lint.scoreStructure}/100` : '…'}</strong>
           {lint && lint.erreurs.length > 0 ? (
