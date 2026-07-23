@@ -18,3 +18,6 @@
 #   STRIPE_SECRET_KEY  (paiement unique 2,99 €)
 # Variables non secrètes :
 #   ANTHROPIC_MODEL    (défaut : claude-sonnet-4-5)
+#
+# Variables non secrètes à générer :
+#   JETON_SECRET_KEY   (chaîne aléatoire, pour signer les jetons de téléchargement)

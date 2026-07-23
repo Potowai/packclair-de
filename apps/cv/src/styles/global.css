@@ -275,3 +275,35 @@ textarea {
   font-size: 0.9rem;
   padding: 2rem 1rem 3rem;
 }
+
+.etat-vert {
+  color: #1a7f3d;
+  font-weight: 600;
+}
+
+.etat-rouge {
+  color: #a33333;
+  font-weight: 600;
+}
+
+/* --- Impression PDF (page téléchargement seulement) --- */
+@media print {
+  body {
+    background: none;
+  }
+  .apercu-barre,
+  .banniere,
+  .aide,
+  .rapport-lint,
+  .etat-vert,
+  .etat-rouge {
+    display: none !important;
+  }
+  .feuille.impression-pdf {
+    border: none;
+    box-shadow: none;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+  }
+}

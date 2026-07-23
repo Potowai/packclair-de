@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { cvSchema } from '@cvclair/cv-schema';
 import { lintCv, type ResultatLint } from '@cvclair/ats-harness';
 import { chargerOuCreerCv, type CvStocke } from '@/storage/db';
@@ -6,8 +6,8 @@ import { MODELE_PAR_DEFAUT, composantModele } from '@/templates';
 
 /**
  * Aperçu fidèle du CV (gratuit). Aucune feuille de style print : le
- * téléchargement PDF est un produit payant (2,99 € — PLAN §3), rendu côté
- * serveur à partir de M2.
+ * téléchargement PDF est un produit payant (2,99 € — PLAN §3). Le bouton
+ * ci-dessous lance la session Stripe Checkout.
  */
 export default function ApercuCv() {
   const [record, setRecord] = useState<CvStocke | null>(null);
@@ -34,6 +34,24 @@ export default function ApercuCv() {
 
   const Modele = composantModele(record.modele);
   const strict = cvSchema.safeParse(record.donnees);
+  const [payementEnCours, setPayementEnCours] = useState(false);
+
+  const telecharger = useCallback(async () => {
+    setPayementEnCours(true);
+    try {
+      const reponse = await fetch('/.netlify/functions/creer-session-telechargement', { method: 'POST' });
+      const data = (await reponse.json().catch(() => ({}))) as { url?: string; erreur?: string };
+      if (reponse.ok && data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.erreur === 'Paiement non configuré.' ? 'Le paiement n\'est pas encore configuré.' : data.erreur ?? 'Erreur de paiement.');
+      }
+    } catch {
+      alert('Connexion impossible.');
+    } finally {
+      setPayementEnCours(false);
+    }
+  }, []);
 
   return (
     <div className="apercu">
@@ -48,8 +66,13 @@ export default function ApercuCv() {
             </span>
           ) : null}
         </div>
-        <button type="button" className="bouton" disabled title="Disponible prochainement (2,99 €)">
-          Télécharger le PDF — 2,99 €
+        <button
+          type="button"
+          className="bouton"
+          disabled={!strict.success || payementEnCours}
+          onClick={telecharger}
+        >
+          {payementEnCours ? 'Redirection…' : 'Télécharger le PDF — 2,99 €'}
         </button>
       </header>
 
