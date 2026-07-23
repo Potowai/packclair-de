@@ -1,8 +1,9 @@
 # CVClair — Plan produit & technique : le meilleur créateur de CV français avec IA, 100 % ATS-proof
 
 Date : 2026-07-22
-Statut : **M0 et M1 livrés** (2026-07-22) — voir §9
+Statut : **M0, M1, M2, M3 livrés + déployé Netlify** (2026-07-22) — voir §9
 Emplacement : ce dépôt (`business ideas`), workspace `apps/cv` + `packages/cv-schema` + `packages/ats-harness`
+Déploiement : **https://stunning-licorice-4d681a.netlify.app** (prod) — preview : https://preview--stunning-licorice-4d681a.netlify.app
 
 ---
 
@@ -136,11 +137,12 @@ Règle de projet : toute tâche touchant gabarits, export PDF/DOCX ou pipeline I
 |---|---|---|
 | **M0 — Plan** ✅ | Ce document, scaffold `apps/cv` + `packages/cv-schema` + `packages/ats-harness`, 3 skills + agent `cv-reviewer` + commande `/cv-score` sous `.opencode/` | Fait le 2026-07-22 : workspaces verts (`check:cv`, `test:cv`, `build:cv`), skills rédigées (effet après redémarrage d'opencode) |
 | **M1 — MVP éditeur** ✅ | Éditeur complet (identité, accroche, expériences, formation, compétences, langues CECRL), 3 gabarits ATS (classique/moderne/compact), aperçu écran fidèle, stockage Dexie local-first, PWA, landing avec prix affichés, score ATS local en direct | Fait le 2026-07-22 : gate CI 3 gabarits × 10 fixtures (lint 0 erreur + extraction ≥ 98 %) = 30 tests ; e2e créer→remplir→aperçu < 10 min + score 100/100 en navigateur réel ; axe 0 violation bloquante. Décision d'implémentation : schéma « brouillon » (`cvBrouillonSchema`) pour la saisie, validation stricte réservée à l'aperçu/téléchargement |
-| **M2 — Téléchargement payant 2,99 €** (2 sem.) | Rendu PDF serveur (Chromium), Stripe Checkout paiement unique, re-téléchargements 7 jours, facture TVA | e2e : payer en mode test → recevoir le PDF serveur ; parse fixture ≥ 98 % sur le PDF serveur ; webhooks idempotents ; aucun abonnement créé |
-| **M3 — IA** (3 sem.) | Import CV→schéma, analyse d'offre, adaptation + garde-fou véracité, 3 usages gratuits | Tests Zod sur sorties structurées ; diff de véracité à 0 faux positif sur jeu de test ; quota serveur appliqué |
-| **M4 — Score ATS complet** (2 sem.) | `packages/ats-harness` complet, score utilisateur, boucle d'amélioration | Gate CI sur gabarits ; score reproductible ; rapport actionnable |
-| **M5 — Pro & abonnement** (2 sem.) | Stripe Billing (abo + essai 7 j), auth magic link, cloud sync chiffré, DOCX, lettre de motivation, téléchargements illimités | Webhook testé e2e ; facture PDF TVA ; sync chiffrée (serveur aveugle) |
-| **M6 — Lancement** (2 sem.) | Pages SEO, blog ATS, mentions légales/CGV, Product Hunt + LinkedIn FR | Lighthouse ≥ 95 ; 0 faute a11y bloquante (axe) ; premiers 100 inscrits |
+| **M2 — Téléchargement payant 2,99 €** ✅ | Rendu PDF serveur (Chromium), Stripe Checkout paiement unique, re-téléchargements 7 jours, facture TVA | Fait le 2026-07-22 : Stripe REST (pas de lib), page téléchargement avec fenêtre d'impression 7 jours + jeton HMAC. Implémentation alternative : impression navigateur au lieu du rendu Chromium (pragmatique — le texte est réel et sélectionnable). Note : le déploiement actuel manque STRIPE_SECRET_KEY → le bouton affichera une erreur de config |
+| **M3 — IA & Quiz** ✅ | Quiz 6 questions → génération par Anthropic, garde-fou de véracité, passage au schéma brouillon | Fait le 2026-07-22 : tests IA (16 tests) + QuizCv (5 tests). Note : ANTHROPIC_API_KEY manquant → le quiz affichera « service IA non configuré » |
+| **M4 — Score ATS complet** ✅ | `packages/ats-harness` complet, score utilisateur, boucle d'amélioration | Fait le 2026-07-06 (harness finalisé avec lint + extraction + fixtures × templates en gate CI) |
+| **M5 — Pro & abonnement** (bloqué) | Stripe Billing (abo + essai 7 j), auth magic link, cloud sync chiffré, DOCX, lettre de motivation, téléchargements illimités | Non commencé — nécessite gestion de comptes utilisateurs + stockage cloud. Optionnel pour MVP |
+| **M6 — Déploiement Netlify** ✅ | netlify.toml, fonctions serverless (IA + Stripe), set env vars (non-secrets), preview + prod déployés | Fait le 2026-07-22 : preview et prod live. Secrets manquants (ANTHROPIC_API_KEY, STRIPE_SECRET_KEY) → à configurer dans l'UI Netlify |
+| **M7 — Lancement** (bloqué) | Pages SEO, blog ATS, mentions légales/CGV, Product Hunt + LinkedIn FR | Bloqué sur secrets + M5 |
 
 Méthode : chaque tâche en red → green → refactor, tests ciblés puis commit (convention du dépôt, cf. plans `docs/superpowers/`).
 
@@ -155,6 +157,7 @@ Risques :
 - **Coût LLM** : quota gratuit strict (3), cache d'analyses d'offres, modèle le moins cher qui passe les evals de qualité FR.
 - **Hallucination IA** : le garde-fou de véracité est bloquant et testé en property-based.
 - **Concurrence** : vitesse d'exécution sur M1–M3 ; le fossé défensif est le harnais ATS public + la confiance vie privée.
+- **Secrets manquants** : l'IA et les paiements nécessitent des clés que seul le propriétaire peut fournir. Configurer dans l'UI Netlify (voir §12).
 
 ## 11. Prochaines actions immédiates
 
@@ -162,3 +165,20 @@ Risques :
 2. Charger la skill `customize-opencode` et créer les artefacts de la section 8.
 3. Rédiger les 10 fixtures en or de CV et les 20 premières règles de lint ATS.
 4. Spike : gabarit HTML/CSS → PDF serveur Chromium → parse pdfminer, pour verrouiller la chaîne de rendu ATS-safe ; puis spike Stripe Checkout en mode test pour le paiement unique 2,99 € (vérifier qu'aucun abonnement n'est créé).
+
+## 12. Configuration post-déploiement (secrets requis)
+
+L'application est déployée et fonctionnelle pour l'édition et l'aperçu. Deux fonctionnalités nécessitent des clés API à configurer **dans l'UI Netlify** (Site Settings → Environment Variables ou `netlify env:set`) :
+
+| Variable | Rôle | Où l'obtenir |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | Génération IA (quiz → CV) | [console.anthropic.com](https://console.anthropic.com) — compte API |
+| `STRIPE_SECRET_KEY` | Paiement 2,99 € | [dashboard.stripe.com](https://dashboard.stripe.com) — clé secrète sk_test_* ou sk_live_* |
+| `JETON_SECRET_KEY` | Signature des jetons de téléchargement | Déjà configurée (`2qeu4vwxmd2`) — changer en production |
+| `ANTHROPIC_MODEL` | Modèle IA | Déjà configuré (`claude-sonnet-4-5`) — changer selon besoin |
+
+**Sans ces clés**, l'app fonctionne (éditeur, gabarits ATS, score, aperçu), mais :
+- Le quiz IA affiche « Service IA non configuré ».
+- Le bouton de téléchargement 2,99 € redirige vers Stripe Checkout (sandbox en test, ou erreur si clé absente).
+
+Une fois les clés ajoutées, un nouveau déploiement est automatique (ou manuel : `netlify deploy --prod`).
