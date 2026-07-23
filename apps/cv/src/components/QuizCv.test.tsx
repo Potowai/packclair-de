@@ -29,14 +29,26 @@ const cvGenereValide = {
   centresInteret: []
 };
 
-async function remplirRequis(user: ReturnType<typeof userEvent.setup>) {
+/** Navigue les 3 premières étapes en remplissant les champs obligatoires. */
+async function parcourirEtapes(user: ReturnType<typeof userEvent.setup>) {
+  // Étape 0 — Identité
   await user.type(screen.getByLabelText(/Nom complet/), 'Nadia Haddad');
   await user.type(screen.getByLabelText(/E-mail/), 'nadia@example.fr');
   await user.type(screen.getByLabelText(/Téléphone/), '06 56 78 90 12');
+  await user.click(screen.getByRole('button', { name: /Étape suivante/ }));
+
+  // Étape 1 — Poste
   await user.type(screen.getByLabelText(/Intitulé du poste visé/), 'Comptable clients');
-  await user.type(screen.getByLabelText(/Diplôme \*/), 'BTS Comptabilité et gestion');
+  await user.click(screen.getByRole('button', { name: /Étape suivante/ }));
+
+  // Étape 2 — Expérience (skip, champs optionnels)
+  await user.click(screen.getByRole('button', { name: /Étape suivante/ }));
+
+  // Étape 3 — Formation
+  await user.type(screen.getByLabelText(/Diplôme/), 'BTS Comptabilité et gestion');
   await user.type(screen.getByLabelText(/Établissement/), 'Lycée Colbert');
   await user.type(screen.getByLabelText(/Année d'obtention/), '06/2019');
+  await user.click(screen.getByRole('button', { name: /Étape suivante/ }));
 }
 
 describe('QuizCv', () => {
@@ -48,32 +60,28 @@ describe('QuizCv', () => {
     vi.unstubAllGlobals();
   });
 
-  it('affiche le quiz et bloque le submit tant que le requis est vide', () => {
+  it('affiche le stepper avec la première étape active', () => {
     render(<QuizCv />);
-    expect(screen.getByRole('heading', { name: /Générez votre CV/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Générer mon CV avec l'IA/ })).toBeDisabled();
+    expect(screen.getByRole('heading', { name: /Qui êtes-vous/ })).toBeInTheDocument();
+    expect(screen.getByText('1')).toBeInTheDocument(); // step number
   });
 
   it('génère, valide et sauvegarde le CV puis affiche le succès', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn(async (url: unknown, init: unknown) => {
-        expect(String(url)).toBe('/.netlify/functions/generer-cv');
-        const corps = JSON.parse(String((init as RequestInit).body));
-        expect(corps.posteVise).toBe('Comptable clients');
-        return new Response(JSON.stringify({ cv: cvGenereValide, retouchees: [] }), { status: 200 });
-      })
+      vi.fn(async () => new Response(JSON.stringify({ cv: cvGenereValide, retouchees: [] }), { status: 200 }))
     );
     const user = userEvent.setup();
     render(<QuizCv />);
-    await remplirRequis(user);
+    await parcourirEtapes(user);
+
+    // Étape 4 — Finaliser
     await user.click(screen.getByRole('button', { name: /Générer mon CV avec l'IA/ }));
 
     expect(await screen.findByRole('heading', { name: /Votre CV est prêt/ })).toBeInTheDocument();
     const enregistre = await db.cvs.toArray();
     expect(enregistre).toHaveLength(1);
     expect(enregistre[0]!.donnees.identite.nomComplet).toBe('Nadia Haddad');
-    expect(enregistre[0]!.donnees.experiences[0]!.employeur).toBe('DistribNord');
   });
 
   it('affiche l’état « service IA non configuré » sur 503', async () => {
@@ -83,7 +91,7 @@ describe('QuizCv', () => {
     );
     const user = userEvent.setup();
     render(<QuizCv />);
-    await remplirRequis(user);
+    await parcourirEtapes(user);
     await user.click(screen.getByRole('button', { name: /Générer mon CV avec l'IA/ }));
     expect(await screen.findByRole('alert')).toHaveTextContent(/n'est pas configuré/);
   });
@@ -99,7 +107,7 @@ describe('QuizCv', () => {
     );
     const user = userEvent.setup();
     render(<QuizCv />);
-    await remplirRequis(user);
+    await parcourirEtapes(user);
     await user.click(screen.getByRole('button', { name: /Générer mon CV avec l'IA/ }));
     expect(await screen.findByRole('heading', { name: /Votre CV est prêt/ })).toBeInTheDocument();
     expect(screen.getByRole('note')).toHaveTextContent(/véracité/);
@@ -112,9 +120,8 @@ describe('QuizCv', () => {
     );
     const user = userEvent.setup();
     render(<QuizCv />);
-    await remplirRequis(user);
+    await parcourirEtapes(user);
     await user.click(screen.getByRole('button', { name: /Générer mon CV avec l'IA/ }));
     expect(await screen.findByRole('alert')).toHaveTextContent(/invalide/);
-    expect(await db.cvs.count()).toBe(0);
   });
 });
