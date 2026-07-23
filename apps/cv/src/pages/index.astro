@@ -1,6 +1,7 @@
 ---
 import '@/styles/global.css';
 import ThemeToggle from '@/components/ThemeToggle';
+import DemoInteractive from '@/components/DemoInteractive';
 ---
 
 <html lang="fr">
@@ -8,7 +9,7 @@ import ThemeToggle from '@/components/ThemeToggle';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>CVClair — Le CV français qui passe les ATS</title>
-    <meta name="description" content="Créez un CV français testé contre les parseurs ATS. Gabarits prouvés, IA qui n'invente rien, données chez vous. Gratuit à créer, 2,99 € à télécharger." />
+    <meta name="description" content="Créez un CV français testé contre les parseurs ATS. Gabarits prouvés, IA qui n'invente rien, données chez vous." />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <script is:inline>
       (function(){var t=localStorage.getItem('cvclair-theme');if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);})();
@@ -18,7 +19,7 @@ import ThemeToggle from '@/components/ThemeToggle';
     <header class="header">
       <a href="/" class="header-logo">CV<span>Clair</span></a>
       <nav class="header-nav">
-        <a href="/app/quiz/">Créer un CV</a>
+        <a href="/app/quiz/">Créer mon CV</a>
         <ThemeToggle client:load />
       </nav>
     </header>
@@ -27,25 +28,27 @@ import ThemeToggle from '@/components/ThemeToggle';
       <section class="accueil-hero">
         <h1>Votre CV, enfin ATS-proof.</h1>
         <p>Créez gratuitement un CV français. L'IA le rédige pour vous — sans rien inventer. Testé contre 20 règles ATS, prouvé sur 10 profils témoins.</p>
-        <a class="bouton" href="/app/quiz/">✨ Générer mon CV avec l'IA</a>
+        <a class="bouton" href="/app/quiz/">Essayer maintenant — c'est gratuit</a>
         <div class="accueil-sous">
-          <span>✓ Gratuit à créer</span>
-          <span>✓ Aucun abonnement</span>
+          <span>Aucune carte bancaire</span>
+          <span>Données restent chez vous</span>
         </div>
       </section>
+
+      <DemoInteractive client:load />
 
       <section class="badges">
         <div class="badge">
           <div class="badge-icon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
-          ATS testé
+          ATS testé sur 10 profils
         </div>
         <div class="badge">
           <div class="badge-icon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
           </div>
-          IA honnête
+          IA qui n'invente rien
         </div>
         <div class="badge">
           <div class="badge-icon">
@@ -59,20 +62,20 @@ import ThemeToggle from '@/components/ThemeToggle';
       <section class="atouts">
         <div class="atout">
           <h3>1. Répondez au quiz</h3>
-          <p>5 questions sur votre expérience, votre formation et vos compétences. 2 minutes chrono.</p>
+          <p>5 questions sur votre expérience. 2 minutes chrono.</p>
         </div>
         <div class="atout">
-          <h3>2. L'IA rédige le CV</h3>
-          <p>Elle reformule vos réponses — sans inventer d'employeur, de chiffre ou de technologie. Le garde-fou vérifie chaque mot.</p>
+          <h3>2. L'IA rédige</h3>
+          <p>Elle reformule vos réponses — sans inventer. Le garde-fou vérifie chaque mot.</p>
         </div>
         <div class="atout">
-          <h3>3. Passez les ATS</h3>
-          <p>Score ATS en direct. 20 règles de structure vérifiées. Gabarits testés avec de vrais parseurs.</p>
+          <h3>3. Téléchargez</h3>
+          <p>PDF texte sélectionnable. Score ATS en direct. Gabarits prouvés.</p>
         </div>
       </section>
 
-      <h2 class="section-titre">Des prix sans piège</h2>
-      <section class="tarifs">
+      <h2 class="section-titre">Tarifs transparents</h2>
+      <section class="tarifs tarifs-deux">
         <div class="tarif">
           <h3>Gratuit</h3>
           <div class="prix">0 €</div>
@@ -83,35 +86,24 @@ import ThemeToggle from '@/components/ThemeToggle';
             <li>Score ATS de structure</li>
             <li>3 générations IA offertes</li>
           </ul>
-          <a class="bouton secondary" href="/app/">Commencer</a>
+          <a class="bouton secondary" href="/app/quiz/">Commencer</a>
         </div>
         <div class="tarif mis-en-avant">
-          <h3>Téléchargement</h3>
-          <div class="prix">2,99 € <small>par CV, une fois</small></div>
-          <ul>
-            <li>PDF haute qualité, texte sélectionnable</li>
-            <li>Sans filigrane</li>
-            <li>Re-téléchargements 7 jours</li>
-            <li>Jamais d'abonnement caché</li>
-          </ul>
-          <a class="bouton" href="/app/quiz/">Créer puis télécharger</a>
-        </div>
-        <div class="tarif">
           <h3>Pro</h3>
           <div class="prix">7,99 € <small>/ mois, ou 59 €/an</small></div>
           <ul>
-            <li>Téléchargements illimités</li>
+            <li>PDF + DOCX illimités</li>
             <li>IA illimitée + adaptation à l'offre</li>
             <li>Score ATS complet</li>
             <li>Lettre de motivation générée</li>
             <li>Synchronisation chiffrée</li>
           </ul>
-          <a class="bouton secondary" href="/app/">Découvrir</a>
+          <a class="bouton" href="/app/quiz/">Découvrir</a>
         </div>
       </section>
 
       <footer class="accueil-pied">
-        <p>CVClair — gabarits vérifiés par harnais automatisé.<br/>« Testé contre les parseurs », jamais « garanti » : notre méthodologie est publique.</p>
+        <p>CVClair — gabarits vérifiés par harnais automatisé.<br/>« Testé contre les parseurs », jamais « garanti ».</p>
       </footer>
     </main>
   </body>
