@@ -1,10 +1,11 @@
 import { cvBrouillonSchema } from '@cvclair/cv-schema';
 import {
-  MODELE_PAR_DEFAUT_IA,
-  appelerAnthropic,
+  appelerIa,
   extraireJson,
   retirerIntrus,
   verifierVeracite,
+  type AppelIaConfig,
+  type ApiFormat,
   type CvGenere,
   type ReponsesQuiz
 } from '../../src/lib/ia';
@@ -16,19 +17,39 @@ function json(corps: unknown, statut = 200): Response {
   });
 }
 
+function modeleDefaut(format: ApiFormat): string {
+  return format === 'anthropic' ? 'claude-sonnet-4-5' : 'gpt-4o-mini';
+}
+
+function lireConfig(): AppelIaConfig {
+  const format = (process.env.AI_PROVIDER ?? 'anthropic') as ApiFormat;
+  const apiKey = process.env.AI_API_KEY ?? process.env.ANTHROPIC_API_KEY ?? '';
+  return {
+    apiKey,
+    format,
+    model: process.env.AI_MODEL || process.env.ANTHROPIC_MODEL || modeleDefaut(format),
+    baseUrl: process.env.AI_BASE_URL
+  };
+}
+
 /**
  * POST /.netlify/functions/generer-cv
- * Corps : ReponsesQuiz. Réponse : { cv, retouchees }.
- * L'identité est reconstruite depuis le quiz (jamais générée par l'IA) ;
- * le garde-fou de véracité retire tout contenu non sourcé ; la sortie est
- * validée par le schéma partagé avant d'être renvoyée.
+ * Corps : ReponsesQuiz → { cv, retouchees }.
+ * Lit AI_PROVIDER, AI_API_KEY, AI_MODEL, AI_BASE_URL pour s'adapter à
+ * n'importe quel fournisseur (Anthropic, OpenRouter, Nvidia, etc.).
  */
 export default async (req: Request): Promise<Response> => {
   if (req.method !== 'POST') return json({ erreur: 'Méthode non autorisée.' }, 405);
 
-  const cle = process.env.ANTHROPIC_API_KEY;
-  if (!cle) {
-    return json({ erreur: 'Service IA non configuré.', details: 'ANTHROPIC_API_KEY manquant.' }, 503);
+  const config = lireConfig();
+  if (!config.apiKey) {
+    return json(
+      {
+        erreur: 'Service IA non configuré.',
+        details: 'Définissez AI_API_KEY (ou ANTHROPIC_API_KEY) dans les variables d\'environnement Netlify.'
+      },
+      503
+    );
   }
 
   let quiz: ReponsesQuiz;
@@ -46,7 +67,7 @@ export default async (req: Request): Promise<Response> => {
   }
 
   try {
-    const texte = await appelerAnthropic(quiz, cle, process.env.ANTHROPIC_MODEL ?? MODELE_PAR_DEFAUT_IA);
+    const texte = await appelerIa(quiz, config);
     const brut = extraireJson(texte) as CvGenere;
     const verdict = verifierVeracite(brut, quiz);
     const nettoye = retirerIntrus(brut, quiz);

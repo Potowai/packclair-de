@@ -215,35 +215,104 @@ export function retirerIntrus(cv: CvGenere, q: ReponsesQuiz): CvGenere {
   return { ...cv, accroche, experiences };
 }
 
-/** Appel à l'API Messages d'Anthropic. Lève une erreur en cas d'échec. */
+// ----------------------------------------------------------------
+// Appel API multi-fournisseur (Anthropic, OpenRouter, Nvidia…)
+// ----------------------------------------------------------------
+
+export type ApiFormat = 'anthropic' | 'openai';
+
+export interface AppelIaConfig {
+  /** Clé API du fournisseur. */
+  apiKey: string;
+  /** Format de l'API : 'anthropic' (Messages) ou 'openai' (Chat Completions). */
+  format: ApiFormat;
+  /** Identifiant du modèle (ex: claude-sonnet-4-5, gpt-4o-mini…). */
+  model: string;
+  /** URL de base de l'API. Défaut selon le format. */
+  baseUrl?: string;
+}
+
+const URLS_PAR_DEFAUT: Record<ApiFormat, string> = {
+  anthropic: 'https://api.anthropic.com',
+  openai: 'https://openrouter.ai/api'
+};
+
+/**
+ * Appelle l'API d'IA (Anthropic Messages, OpenAI Chat Completions sous
+ * OpenRouter/Nvidia, etc.) avec les messages du quiz. Lève une erreur
+ * descriptive en cas d'échec.
+ */
+export async function appelerIa(
+  q: ReponsesQuiz,
+  config: AppelIaConfig
+): Promise<string> {
+  const { system, user } = construireMessagesQuiz(q);
+  const baseUrl = config.baseUrl ?? URLS_PAR_DEFAUT[config.format];
+  const delai = AbortSignal.timeout(45_000);
+
+  if (config.format === 'anthropic') {
+    const reponse = await fetch(`${baseUrl}/v1/messages`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': config.apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: config.model,
+        max_tokens: 2000,
+        temperature: 0.3,
+        system,
+        messages: [{ role: 'user', content: user }]
+      }),
+      signal: delai
+    });
+    if (!reponse.ok) {
+      const detail = await reponse.text().catch(() => '');
+      throw new Error(`API IA (anthropic) ${reponse.status}: ${detail.slice(0, 200)}`);
+    }
+    const data = (await reponse.json()) as { content?: { type: string; text?: string }[] };
+    const texte = data.content?.find((c) => c.type === 'text')?.text;
+    if (!texte) throw new Error('Réponse IA (anthropic) sans contenu texte.');
+    return texte;
+  }
+
+  // Format OpenAI (OpenRouter, Nvidia, OpenAI, Groq, Together, etc.)
+  const reponse = await fetch(`${baseUrl}/v1/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      authorization: `Bearer ${config.apiKey}`
+    },
+    body: JSON.stringify({
+      model: config.model,
+      max_tokens: 2000,
+      temperature: 0.3,
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user', content: user }
+      ]
+    }),
+    signal: delai
+  });
+  if (!reponse.ok) {
+    const detail = await reponse.text().catch(() => '');
+    throw new Error(`API IA (openai) ${reponse.status}: ${detail.slice(0, 200)}`);
+  }
+  const data = (await reponse.json()) as { choices?: { message?: { content?: string } }[] };
+  const texte = data.choices?.[0]?.message?.content;
+  if (!texte) throw new Error('Réponse IA (openai) sans contenu texte.');
+  return texte;
+}
+
+/**
+ * Appel Anthropic (ancien nom — conservé pour compatibilité). Délègue à
+ * `appelerIa` avec le format 'anthropic'.
+ */
 export async function appelerAnthropic(
   q: ReponsesQuiz,
   cleApi: string,
   modele: string = MODELE_PAR_DEFAUT_IA
 ): Promise<string> {
-  const { system, user } = construireMessagesQuiz(q);
-  const reponse = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'x-api-key': cleApi,
-      'anthropic-version': '2023-06-01'
-    },
-    body: JSON.stringify({
-      model: modele,
-      max_tokens: 2000,
-      temperature: 0.3,
-      system,
-      messages: [{ role: 'user', content: user }]
-    }),
-    signal: AbortSignal.timeout(45_000)
-  });
-  if (!reponse.ok) {
-    const detail = await reponse.text().catch(() => '');
-    throw new Error(`Anthropic ${reponse.status}: ${detail.slice(0, 200)}`);
-  }
-  const data = (await reponse.json()) as { content?: { type: string; text?: string }[] };
-  const texte = data.content?.find((c) => c.type === 'text')?.text;
-  if (!texte) throw new Error('Réponse Anthropic sans contenu texte.');
-  return texte;
+  return appelerIa(q, { apiKey: cleApi, format: 'anthropic', model: modele });
 }

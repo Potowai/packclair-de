@@ -168,17 +168,29 @@ Risques :
 
 ## 12. Configuration post-déploiement (secrets requis)
 
-L'application est déployée et fonctionnelle pour l'édition et l'aperçu. Deux fonctionnalités nécessitent des clés API à configurer **dans l'UI Netlify** (Site Settings → Environment Variables ou `netlify env:set`) :
+L'application est déployée et fonctionnelle pour l'édition et l'aperçu. Deux fonctionnalités nécessitent des clés API.
+
+### IA — multi-fournisseur
+
+Le quiz IA fonctionne avec n'importe quel fournisseur compatible via `AI_PROVIDER`. Définir **une** des combinaisons ci-dessous dans l'UI Netlify (Site Settings → Environment Variables) :
+
+| Fournisseur | AI_PROVIDER | AI_API_KEY | AI_MODEL (exemple) |
+|---|---|---|---|
+| **Anthropic** | `anthropic` (défaut) | clé `sk-ant-…` | `claude-sonnet-4-5` |
+| **OpenRouter** (recommandé gratuit) | `openai` | clé `sk-or-…` | `meta-llama/llama-3.1-8b-instruct:free` |
+| **Nvidia** | `openai` | clé `nvapi-…` | `meta/llama-3.1-8b-instruct` (+ `AI_BASE_URL=https://integrate.api.nvidia.com/v1`) |
+
+Compatibilité ascendante : `ANTHROPIC_API_KEY` / `ANTHROPIC_MODEL` sont utilisés si `AI_API_KEY` / `AI_MODEL` absents.
+
+### Paiement
 
 | Variable | Rôle | Où l'obtenir |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | Génération IA (quiz → CV) | [console.anthropic.com](https://console.anthropic.com) — compte API |
-| `STRIPE_SECRET_KEY` | Paiement 2,99 € | [dashboard.stripe.com](https://dashboard.stripe.com) — clé secrète sk_test_* ou sk_live_* |
-| `JETON_SECRET_KEY` | Signature des jetons de téléchargement | Déjà configurée (`2qeu4vwxmd2`) — changer en production |
-| `ANTHROPIC_MODEL` | Modèle IA | Déjà configuré (`claude-sonnet-4-5`) — changer selon besoin |
+| `STRIPE_SECRET_KEY` | Paiement 2,99 € | [dashboard.stripe.com](https://dashboard.stripe.com) |
+| `JETON_SECRET_KEY` | Signature jetons téléchargement | Déjà configurée — changer en production |
 
 **Sans ces clés**, l'app fonctionne (éditeur, gabarits ATS, score, aperçu), mais :
 - Le quiz IA affiche « Service IA non configuré ».
-- Le bouton de téléchargement 2,99 € redirige vers Stripe Checkout (sandbox en test, ou erreur si clé absente).
+- Le bouton de téléchargement 2,99 € redirige vers Stripe (ou erreur si clé absente).
 
-Une fois les clés ajoutées, un nouveau déploiement est automatique (ou manuel : `netlify deploy --prod`).
+Une fois les clés ajoutées, redeployer (`netlify deploy --prod` en local, ou redéploiement auto si le site est lié à GitHub).

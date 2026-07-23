@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   appelerAnthropic,
+  appelerIa,
   construireMessagesQuiz,
   extraireJson,
   nombresDe,
@@ -169,7 +170,7 @@ describe('retirerIntrus', () => {
   });
 });
 
-describe('appelerAnthropic', () => {
+describe('appelerAnthropic (format anthropic)', () => {
   it('renvoie le texte de la réponse', async () => {
     vi.stubGlobal(
       'fetch',
@@ -185,6 +186,35 @@ describe('appelerAnthropic', () => {
 
   it('lève une erreur explicite en cas d’échec API', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => new Response('rate limited', { status: 429 })));
-    await expect(appelerAnthropic(quiz, 'cle')).rejects.toThrow('Anthropic 429');
+    await expect(appelerAnthropic(quiz, 'cle')).rejects.toThrow('API IA (anthropic) 429');
+  });
+});
+
+describe('appelerIa (format openai — OpenRouter/Nvidia)', () => {
+  it('envoie la requête au format Chat Completions avec le système en message', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () =>
+        new Response(JSON.stringify({ choices: [{ message: { content: '{"b":2}' } }] }), { status: 200 })
+      )
+    );
+    await expect(
+      appelerIa(quiz, { apiKey: 'sk-test', format: 'openai', model: 'gpt-4o-mini', baseUrl: 'https://openrouter.ai/api' })
+    ).resolves.toBe('{"b":2}');
+    const appel = (fetch as unknown as ReturnType<typeof vi.fn>).mock.calls[0]!;
+    expect(String(appel[0])).toBe('https://openrouter.ai/api/v1/chat/completions');
+    const headers = appel[1]!.headers as Record<string, string>;
+    expect(headers.authorization).toBe('Bearer sk-test');
+    const corps = JSON.parse(String(appel[1]!.body));
+    expect(corps.model).toBe('gpt-4o-mini');
+    expect(corps.messages[0].role).toBe('system');
+    expect(corps.messages[1].role).toBe('user');
+  });
+
+  it('lève une erreur avec le préfixe openai', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('bad request', { status: 400 })));
+    await expect(appelerIa(quiz, { apiKey: 'sk-test', format: 'openai', model: 'm' })).rejects.toThrow(
+      'API IA (openai) 400'
+    );
   });
 });

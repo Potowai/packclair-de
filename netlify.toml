@@ -1,8 +1,6 @@
-# CVClair — déploiement Netlify (PLAN docs/cv-maker/PLAN.md §7).
-# Le site est l'app apps/cv ; les fonctions serverless vivent dans
-# apps/cv/netlify/functions (génération IA, paiement Stripe).
+# CVClair — déploiement Netlify
 [build]
-  base = "apps/cv"
+  base = "apps/cv/"
   command = "npm run build"
   publish = "dist"
   functions = "netlify/functions"
@@ -13,11 +11,30 @@
 [functions]
   node_bundler = "esbuild"
 
-# Secrets à configurer (netlify env:set ou l'UI) — jamais dans ce fichier :
-#   ANTHROPIC_API_KEY  (génération IA du quiz)
-#   STRIPE_SECRET_KEY  (paiement unique 2,99 €)
-# Variables non secrètes :
-#   ANTHROPIC_MODEL    (défaut : claude-sonnet-4-5)
+# ── IA (quiz → génération de CV) ──────────────────────────
+# Fournisseur au choix — variables universelles :
+#   AI_PROVIDER   (= anthropic | openai)
+#   AI_API_KEY    clé API du fournisseur
+#   AI_MODEL      identifiant du modèle
+#   AI_BASE_URL   URL de base de l'API (optionnelle)
 #
-# Variables non secrètes à générer :
-#   JETON_SECRET_KEY   (chaîne aléatoire, pour signer les jetons de téléchargement)
+# Compatibilité ascendante (Anthropic) :
+#   ANTHROPIC_API_KEY   (utilisé si AI_API_KEY absent)
+#   ANTHROPIC_MODEL     (utilisé si AI_MODEL absent)
+#
+# Exemple OpenRouter :
+#   AI_PROVIDER=openrouter → openai
+#   AI_API_KEY=sk-or-xxx
+#   AI_MODEL=meta-llama/llama-3.1-8b-instruct:free
+#
+# Exemple Nvidia build.nvidia.com :
+#   AI_PROVIDER=openai
+#   AI_API_KEY=nvapi-xxx
+#   AI_BASE_URL=https://integrate.api.nvidia.com/v1
+#   AI_MODEL=meta/llama-3.1-8b-instruct
+#
+# ── Paiement Stripe (2,99 €) ───────────────────────────────
+#   STRIPE_SECRET_KEY	  clé secrète Stripe (sk_test_...)
+#
+# ── Jeton de téléchargement ────────────────────────────────
+#   JETON_SECRET_KEY   chaîne aléatoire pour signer les jetons
