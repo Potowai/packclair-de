@@ -122,6 +122,7 @@ export default function CvEditeur({ delaiSauvegarde = 400 }: { delaiSauvegarde?:
         </div>
         <div>
           <span role="status">{statut === 'enregistre' ? 'Enregistré' : statut === 'pret' ? 'Modification…' : ''}</span>{' '}
+          <a href="/app/quiz/">Générer avec l'IA</a>{' '}
           <a className="bouton" href="/app/apercu/">
             Voir l'aperçu
           </a>

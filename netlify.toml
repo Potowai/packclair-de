@@ -1,0 +1,20 @@
+# CVClair — déploiement Netlify (PLAN docs/cv-maker/PLAN.md §7).
+# Le site est l'app apps/cv ; les fonctions serverless vivent dans
+# apps/cv/netlify/functions (génération IA, paiement Stripe).
+[build]
+  base = "apps/cv"
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+[functions]
+  node_bundler = "esbuild"
+
+# Secrets à configurer (netlify env:set ou l'UI) — jamais dans ce fichier :
+#   ANTHROPIC_API_KEY  (génération IA du quiz)
+#   STRIPE_SECRET_KEY  (paiement unique 2,99 €)
+# Variables non secrètes :
+#   ANTHROPIC_MODEL    (défaut : claude-sonnet-4-5)

@@ -30,15 +30,17 @@ export default defineConfig({
         icons: [{ src: 'icons/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }]
       },
       workbox: {
-        navigateFallbackDenylist: [/^\/api\//],
+        navigateFallbackDenylist: [/^\/api\//, /^\/\.netlify\//],
         runtimeCaching: [
           {
-            urlPattern: ({ request }) => request.destination === 'document',
+            urlPattern: ({ request, url }) =>
+              request.destination === 'document' && !url.pathname.startsWith('/.netlify/'),
             handler: 'NetworkFirst',
             options: { cacheableResponse: { statuses: [0, 200] } }
           },
           {
-            urlPattern: ({ request }) => request.destination !== 'document',
+            urlPattern: ({ request, url }) =>
+              request.destination !== 'document' && !url.pathname.startsWith('/.netlify/'),
             handler: 'CacheFirst',
             options: { cacheableResponse: { statuses: [0, 200] } }
           }
