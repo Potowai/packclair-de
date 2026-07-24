@@ -2,7 +2,9 @@
 import '@/styles/global.css';
 import ThemeToggle from '@/components/ThemeToggle';
 import DemoInteractive from '@/components/DemoInteractive';
-import BeforeAfterCV from '@/components/BeforeAfterCV';
+import ProductScreenshots from '@/components/ProductScreenshots';
+import ProductWalkthrough from '@/components/ProductWalkthrough';
+import ReviewCards from '@/components/ReviewCards';
 ---
 
 <html lang="fr">
@@ -16,7 +18,7 @@ import BeforeAfterCV from '@/components/BeforeAfterCV';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <script is:inline>
-      (function(){var t=localStorage.getItem('cvclair-theme');if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);})();
+      (function(){var t=localStorage.getItem('cvclair-theme');if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();
     </script>
   </head>
   <body>
@@ -30,56 +32,16 @@ import BeforeAfterCV from '@/components/BeforeAfterCV';
 
     <main>
       <!-- ═══ HERO ═══ -->
-      <section class="hero" style="position:relative">
-        <div class="hero-shapes">
-          <div class="hero-shape hero-shape-1" />
-          <div class="hero-shape hero-shape-2" />
-          <div class="hero-shape hero-shape-3" />
+      <section class="hero">
+        <div class="hero-badge">✓ Testé contre 20 règles ATS • Gratuit</div>
+        <h1>Le CV qui passe<br/>les tests ATS.</h1>
+        <p class="hero-sub">L'IA rédige votre CV en 2 minutes. Pas de blabla, pas d'invention. Juste vos faits, reformulés pour passer les robots.</p>
+        <div class="hero-cta">
+          <a class="bouton bouton-lg" href="/app/quiz/">✨ Créer mon CV maintenant</a>
         </div>
-        <div class="hero-content" style="position:relative;z-index:1">
-          <div class="hero-badge">✓ Testé contre 20 règles ATS • Gratuit</div>
-          <h1>Le CV qui passe<br/>les tests ATS.</h1>
-          <p class="hero-sub">L'IA rédige votre CV en 2 minutes. Pas de blabla, pas d'invention.<br/>Juste vos faits, reformulés pour passer les robots.</p>
-          <div class="hero-cta">
-            <a class="bouton bouton-lg" href="/app/quiz/">✨ Créer mon CV maintenant</a>
-          </div>
-          <p class="hero-meta">Aucune carte bancaire • Données restent chez vous • Sans abonnement</p>
-        </div>
-        <div class="hero-visual" style="position:relative;z-index:1">
-          <div class="hero-cv-card">
-            <div class="hero-cv-header">
-              <div class="hero-cv-avatar">JD</div>
-              <div>
-                <div class="hero-cv-name">Jean Dupont</div>
-                <div class="hero-cv-role">Développeur Full-Stack</div>
-              </div>
-            </div>
-            <div class="hero-cv-section">
-              <div class="hero-cv-section-title">Expérience</div>
-              <div class="hero-cv-item">
-                <div class="hero-cv-item-head">
-                  <span class="hero-cv-item-title">Lead Developer</span>
-                  <span class="hero-cv-item-date">2022 – présent</span>
-                </div>
-                <div class="hero-cv-item-company">TechCorp • Paris</div>
-                <ul class="hero-cv-list">
-                  <li>Architecturé une API traitant 2M de requêtes/jour</li>
-                  <li>Réduit le temps de chargement de 40 %</li>
-                </ul>
-              </div>
-            </div>
-            <div class="hero-cv-section">
-              <div class="hero-cv-section-title">Compétences</div>
-              <div class="hero-cv-tags">
-                <span>React</span><span>TypeScript</span><span>Node.js</span><span>PostgreSQL</span>
-              </div>
-            </div>
-            <div class="hero-cv-score">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Score ATS : 98/100
-            </div>
-          </div>
-        </div>
+        <p class="hero-meta">Aucune carte bancaire • Données restent chez vous</p>
+
+        <ProductScreenshots client:load />
       </section>
 
       <!-- ═══ STATS BAR ═══ -->
@@ -119,93 +81,24 @@ import BeforeAfterCV from '@/components/BeforeAfterCV';
         <DemoInteractive client:load />
       </section>
 
-      <!-- ═══ BEFORE / AFTER ═══ -->
-      <section class="section reveal">
-        <div class="section-header">
-          <h2>La différence CVClair</h2>
-          <p>Glissez pour comparer un CV classique (Canva) avec un CV optimisé ATS.</p>
-        </div>
-        <BeforeAfterCV client:load />
-      </section>
-
-      <!-- ═══ FEATURES ═══ -->
+      <!-- ═══ PRODUCT WALKTHROUGH ═══ -->
       <section class="section section-alt">
         <div class="section-header reveal">
-          <h2>Pourquoi CVClair</h2>
+          <h2>Comment ça marche</h2>
         </div>
-        <div class="features-grid">
-          <div class="feature-card reveal reveal-delay-1">
-            <div class="feature-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            </div>
-            <h3>ATS testé, pas juste « optimisé »</h3>
-            <p>20 règles de structure vérifiées en CI. Chaque gabarit est parsé avant publication. Pas de promesse — un score mesuré.</p>
-          </div>
-          <div class="feature-card reveal reveal-delay-2">
-            <div class="feature-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            </div>
-            <h3>IA qui n'invente rien</h3>
-            <p>Un garde-fou vérifie chaque mot. Tout chiffre, employeur ou diplôme non sourcé est supprimé. Zéro hallucination.</p>
-          </div>
-          <div class="feature-card reveal reveal-delay-3">
-            <div class="feature-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            </div>
-            <h3>Vos données restent chez vous</h3>
-            <p>Local-first : tout vit dans votre navigateur. Aucun serveur ne stocke vos informations personnelles.</p>
-          </div>
-          <div class="feature-card reveal reveal-delay-4">
-            <div class="feature-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </div>
-            <h3>2 minutes chrono</h3>
-            <p>5 questions. L'IA fait le reste. Pas de formulaire de 47 champs — juste l'essentiel pour un CV qui passe.</p>
-          </div>
-        </div>
+        <ProductWalkthrough client:load />
       </section>
 
-      <!-- ═══ TESTIMONIALS ═══ -->
+      <!-- ═══ REVIEWS ═══ -->
       <section class="section">
         <div class="section-header reveal">
           <h2>Ce qu'en disent les utilisateurs</h2>
         </div>
-        <div class="testimonials">
-          <div class="testimonial reveal reveal-delay-1">
-            <p class="testimonial-text">« J'ai postulé à 15 offres avec mon ancien CV. 0 réponse. Avec CVClair, j'en ai eu 4 en une semaine. La différence : le format ATS. »</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">ML</div>
-              <div>
-                <div class="testimonial-name">Marie Lefèvre</div>
-                <div class="testimonial-role">Chef de projet marketing</div>
-              </div>
-            </div>
-          </div>
-          <div class="testimonial reveal reveal-delay-2">
-            <p class="testimonial-text">« Enfin un outil qui ne me demande pas mon IBAN pour télécharger mon propre CV. Le prix est honnête et le résultat est propre. »</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">SB</div>
-              <div>
-                <div class="testimonial-name">Sofiane Benali</div>
-                <div class="testimonial-role">Développeur backend</div>
-              </div>
-            </div>
-          </div>
-          <div class="testimonial reveal reveal-delay-3">
-            <p class="testimonial-text">« J'ai recommandé CVClair à toute mon équipe de recrutement. On voit la différence entre un CV qui passe l'ATS et un CV fait sur Canva. »</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">AC</div>
-              <div>
-                <div class="testimonial-name">Amélie Cartier</div>
-                <div class="testimonial-role">DRH, PME 50 personnes</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ReviewCards />
       </section>
 
       <!-- ═══ FINAL CTA ═══ -->
-      <section class="section cta-section reveal">
+      <section class="cta-section reveal">
         <h2>Prêt à créer votre CV ?</h2>
         <p>C'est gratuit. Sans carte bancaire. 2 minutes.</p>
         <a class="bouton bouton-lg" href="/app/quiz/">✨ Créer mon CV maintenant</a>

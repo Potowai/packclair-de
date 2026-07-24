@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
 function getStoredTheme(): 'light' | 'dark' {
-  if (typeof window === 'undefined') return 'light';
+  if (typeof window === 'undefined') return 'dark';
   const stored = localStorage.getItem('cvclair-theme');
   if (stored === 'dark' || stored === 'light') return stored;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  return 'dark';
 }
 
 function applyTheme(theme: 'light' | 'dark') {

@@ -12,7 +12,7 @@ import Header from '@/components/Header';
     <meta name="robots" content="noindex" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <script is:inline>
-      (function(){var t=localStorage.getItem('cvclair-theme');if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);})();
+      (function(){var t=localStorage.getItem('cvclair-theme');if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
