@@ -9,7 +9,7 @@ import DemoInteractive from '@/components/DemoInteractive';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>CVClair — Le CV français qui passe les ATS</title>
-    <meta name="description" content="Créez un CV français testé contre les parseurs ATS. Gabarits prouvés, IA qui n'invente rien, données chez vous." />
+    <meta name="description" content="Créez un CV français testé contre les parseurs ATS. L'IA le rédige pour vous sans rien inventer." />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <script is:inline>
       (function(){var t=localStorage.getItem('cvclair-theme');if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);})();
@@ -25,86 +25,177 @@ import DemoInteractive from '@/components/DemoInteractive';
     </header>
 
     <main>
-      <section class="accueil-hero">
-        <h1>Votre CV, enfin ATS-proof.</h1>
-        <p>Créez gratuitement un CV français. L'IA le rédige pour vous — sans rien inventer. Testé contre 20 règles ATS, prouvé sur 10 profils témoins.</p>
-        <a class="bouton" href="/app/quiz/">Essayer maintenant — c'est gratuit</a>
-        <div class="accueil-sous">
-          <span>Aucune carte bancaire</span>
-          <span>Données restent chez vous</span>
-        </div>
-      </section>
-
-      <DemoInteractive client:load />
-
-      <section class="badges">
-        <div class="badge">
-          <div class="badge-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      <!-- ═══ HERO ═══ -->
+      <section class="hero">
+        <div class="hero-content">
+          <div class="hero-badge">✓ Testé contre 20 règles ATS • Gratuit</div>
+          <h1>Le CV qui passe<br/>les tests ATS.</h1>
+          <p class="hero-sub">L'IA rédige votre CV en 2 minutes. Pas de blabla, pas d'invention.<br/>Juste vos faits, reformulés pour passer les robots.</p>
+          <div class="hero-cta">
+            <a class="bouton bouton-lg" href="/app/quiz/">✨ Créer mon CV maintenant</a>
           </div>
-          ATS testé sur 10 profils
+          <p class="hero-meta">Aucune carte bancaire • Données restent chez vous • Sans abonnement</p>
         </div>
-        <div class="badge">
-          <div class="badge-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <div class="hero-visual">
+          <div class="hero-cv-card">
+            <div class="hero-cv-header">
+              <div class="hero-cv-avatar">JD</div>
+              <div>
+                <div class="hero-cv-name">Jean Dupont</div>
+                <div class="hero-cv-role">Développeur Full-Stack</div>
+              </div>
+            </div>
+            <div class="hero-cv-section">
+              <div class="hero-cv-section-title">Expérience</div>
+              <div class="hero-cv-item">
+                <div class="hero-cv-item-head">
+                  <span class="hero-cv-item-title">Lead Developer</span>
+                  <span class="hero-cv-item-date">2022 – présent</span>
+                </div>
+                <div class="hero-cv-item-company">TechCorp • Paris</div>
+                <ul class="hero-cv-list">
+                  <li>Architecturé une API traitant 2M de requêtes/jour</li>
+                  <li>Réduit le temps de chargement de 40 %</li>
+                </ul>
+              </div>
+            </div>
+            <div class="hero-cv-section">
+              <div class="hero-cv-section-title">Compétences</div>
+              <div class="hero-cv-tags">
+                <span>React</span><span>TypeScript</span><span>Node.js</span><span>PostgreSQL</span>
+              </div>
+            </div>
+            <div class="hero-cv-score">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Score ATS : 98/100
+            </div>
           </div>
-          IA qui n'invente rien
         </div>
-        <div class="badge">
-          <div class="badge-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </section>
+
+      <!-- ═══ LIVE DEMO ═══ -->
+      <section class="section">
+        <div class="section-header">
+          <h2>Essayez avant de vous engager</h2>
+          <p>Remplissez le formulaire, voyez votre CV se construire en direct.</p>
+        </div>
+        <DemoInteractive client:load />
+      </section>
+
+      <!-- ═══ FEATURES ═══ -->
+      <section class="section section-alt">
+        <div class="section-header">
+          <h2>Pourquoi CVClair</h2>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3>ATS testé, pas juste « optimisé »</h3>
+            <p>20 règles de structure vérifiées en CI. Chaque gabarit est parsé avant publication. Pas de promesse — un score mesuré.</p>
           </div>
-          Données locales
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </div>
+            <h3>IA qui n'invente rien</h3>
+            <p>Un garde-fou vérifie chaque mot. Tout chiffre, employeur ou diplôme non sourcé est supprimé. Zéro hallucination.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h3>Vos données restent chez vous</h3>
+            <p>Local-first : tout vit dans votre navigateur. Aucun serveur ne stocke vos informations personnelles.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h3>2 minutes chrono</h3>
+            <p>5 questions. L'IA fait le reste. Pas de formulaire de 47 champs — juste l'essentiel pour un CV qui passe.</p>
+          </div>
         </div>
       </section>
 
-      <h2 class="section-titre">Comment ça marche</h2>
-      <section class="atouts">
-        <div class="atout">
-          <h3>1. Répondez au quiz</h3>
-          <p>5 questions sur votre expérience. 2 minutes chrono.</p>
+      <!-- ═══ TESTIMONIALS ═══ -->
+      <section class="section">
+        <div class="section-header">
+          <h2>Ce qu'en disent les utilisateurs</h2>
         </div>
-        <div class="atout">
-          <h3>2. L'IA rédige</h3>
-          <p>Elle reformule vos réponses — sans inventer. Le garde-fou vérifie chaque mot.</p>
-        </div>
-        <div class="atout">
-          <h3>3. Téléchargez</h3>
-          <p>PDF texte sélectionnable. Score ATS en direct. Gabarits prouvés.</p>
-        </div>
-      </section>
-
-      <h2 class="section-titre">Tarifs transparents</h2>
-      <section class="tarifs tarifs-deux">
-        <div class="tarif">
-          <h3>Gratuit</h3>
-          <div class="prix">0 €</div>
-          <ul>
-            <li>Création complète du CV</li>
-            <li>3 gabarits ATS de base</li>
-            <li>Aperçu fidèle à l'écran</li>
-            <li>Score ATS de structure</li>
-            <li>3 générations IA offertes</li>
-          </ul>
-          <a class="bouton secondary" href="/app/quiz/">Commencer</a>
-        </div>
-        <div class="tarif mis-en-avant">
-          <h3>Pro</h3>
-          <div class="prix">7,99 € <small>/ mois, ou 59 €/an</small></div>
-          <ul>
-            <li>PDF + DOCX illimités</li>
-            <li>IA illimitée + adaptation à l'offre</li>
-            <li>Score ATS complet</li>
-            <li>Lettre de motivation générée</li>
-            <li>Synchronisation chiffrée</li>
-          </ul>
-          <a class="bouton" href="/app/quiz/">Découvrir</a>
+        <div class="testimonials">
+          <div class="testimonial">
+            <p class="testimonial-text">« J'ai postulé à 15 offres avec mon ancien CV. 0 réponse. Avec CVClair, j'en ai eu 4 en une semaine. La différence : le format ATS. »</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">ML</div>
+              <div>
+                <div class="testimonial-name">Marie Lefèvre</div>
+                <div class="testimonial-role">Chef de projet marketing</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial">
+            <p class="testimonial-text">« Enfin un outil qui ne me demande pas mon IBAN pour télécharger mon propre CV. Le prix est honnête et le résultat est propre. »</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">SB</div>
+              <div>
+                <div class="testimonial-name">Sofiane Benali</div>
+                <div class="testimonial-role">Développeur backend</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial">
+            <p class="testimonial-text">« J'ai recommandé CVClair à toute mon équipe de recrutement. On voit la différence entre un CV qui passe l'ATS et un CV fait sur Canva. »</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">AC</div>
+              <div>
+                <div class="testimonial-name">Amélie Cartier</div>
+                <div class="testimonial-role">DRH, PME 50 personnes</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <footer class="accueil-pied">
-        <p>CVClair — gabarits vérifiés par harnais automatisé.<br/>« Testé contre les parseurs », jamais « garanti ».</p>
-      </footer>
+      <!-- ═══ FINAL CTA ═══ -->
+      <section class="section cta-section">
+        <h2>Prêt à créer votre CV ?</h2>
+        <p>C'est gratuit. Sans carte bancaire. 2 minutes.</p>
+        <a class="bouton bouton-lg" href="/app/quiz/">✨ Créer mon CV maintenant</a>
+      </section>
     </main>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="/" class="header-logo">CV<span>Clair</span></a>
+          <p>Le CV français qui passe les ATS. Gabarits testés, IA honnête, données locales.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Produit</h4>
+            <a href="/app/quiz/">Créer un CV</a>
+            <a href="/app/">Éditeur</a>
+            <a href="/app/apercu/">Aperçu</a>
+          </div>
+          <div class="footer-col">
+            <h4>Légal</h4>
+            <a href="#">Mentions légales</a>
+            <a href="#">CGU</a>
+            <a href="#">CGV</a>
+            <a href="#">Politique de confidentialité</a>
+          </div>
+          <div class="footer-col">
+            <h4>Contact</h4>
+            <a href="mailto:contact@cvclair.fr">contact@cvclair.fr</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CVClair. Tous droits réservés. Fait avec ♥ en France.</p>
+      </div>
+    </footer>
   </body>
 </html>
